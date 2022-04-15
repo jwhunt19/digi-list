@@ -1,6 +1,6 @@
-import axios from 'axios';
-import mongoose from 'mongoose';
-import Digimon from './database.js';
+const axios = require('axios')
+const mongoose = require('mongoose')
+const { Digimon } = require('./database')
 
 const seedDigimon = async () => {
   console.log('beginning seed')
@@ -10,7 +10,8 @@ const seedDigimon = async () => {
     await Digimon.create({
       name: data[i].name,
       img: data[i].img,
-      level: data[i].level
+      level: data[i].level,
+      nickname: ''
     }, (err, digimon) => {
       if (err) return err
     })
@@ -19,5 +20,5 @@ const seedDigimon = async () => {
   console.log('seed complete. disconnecting...')
 };
 
-await seedDigimon();
+seedDigimon();
 setTimeout(() => mongoose.disconnect(), 5000);
