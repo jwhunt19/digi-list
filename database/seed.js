@@ -1,24 +1,19 @@
 const axios = require('axios')
 const mongoose = require('mongoose')
-const { Digimon } = require('./database')
+const { Digimon } = require('./models');
 
-const seedDigimon = async () => {
+(async () => {
   console.log('beginning seed')
-	const { data } = await axios.get('https://digimon-api.vercel.app/api/digimon');
+  const { data } = await axios.get('https://digimon-api.vercel.app/api/digimon')
+  const digimonData = []
 
   for (let i = 0; i < data.length; i++) {
-    await Digimon.create({
-      name: data[i].name,
-      img: data[i].img,
-      level: data[i].level,
-      nickname: ''
-    }, (err, digimon) => {
-      if (err) return err
-    })
+    digimonData.push({ name: data[i].name, img: data[i].img, level: data[i].level })
   }
 
-  console.log('seed complete. disconnecting...')
-};
+  mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost/digilist', { useNewUrlParser: true, useUnifiedTopology: true })
+  await Digimon.insertMany(digimonData)
+  mongoose.disconnect()
 
-seedDigimon();
-setTimeout(() => mongoose.disconnect(), 5000);
+  console.log('seed complete. disconnecting...')
+})()
