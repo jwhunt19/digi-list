@@ -16,7 +16,10 @@ const savedDigimonSchema = new mongoose.Schema({
   },
   img: String,
   level: String,
-  nickname: String
+  nickname: {
+    type: String,
+    unique: true
+  }
 })
 
 const Digimon = mongoose.model('Digimon', digimonSchema)

@@ -12,7 +12,7 @@ const { Digimon } = require('./models');
   }
 
   mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost/digilist', { useNewUrlParser: true, useUnifiedTopology: true })
-  await Digimon.insertMany(digimonData)
+  await Digimon.insertMany(digimonData) // TODO error handling
   mongoose.disconnect()
 
   console.log('seed complete. disconnecting...')
